@@ -75,7 +75,7 @@ class Node(object):
     _fixed_income = cy.declare(cy.bint)
     _bidoffer_set = cy.declare(cy.bint)
     _bidoffer_paid = cy.declare(cy.double)
-
+    
     def __init__(self, name, parent=None, children=None):
 
         self.name = name
@@ -109,17 +109,17 @@ class Node(object):
         # to update if another node tries to access a given value (say weight).
         # This avoid calling the update until it is actually needed.
         self.root.stale = False
-
+        
         # helper vars
         self._price = 0
         self._value = 0
         self._notl_value = 0
         self._weight = 0
         self._capital = 0
-
+        
         # is security flag - used to avoid updating 0 pos securities
         self._issec = False
-
+        
         # fixed income flag - used to turn on notional weighing
         self._fixed_income = False
         # flag for whether to do bid/offer accounting
@@ -289,8 +289,7 @@ class Node(object):
     @property
     def members(self):
         """
-        Node members. Members include current node as well as Node's
-        children.
+        Node members. Members include current node as well as Node's children.
         """
         res = [self]
         for c in list(self.children.values()):
@@ -325,7 +324,9 @@ class Node(object):
 class StrategyBase(Node):
 
     """
-    Strategy Node. Used to define strategy logic within a tree.
+    Strategy Node. 
+    
+    Used to define strategy logic within a tree.
     A Strategy's role is to allocate capital to it's children
     based on a function.
 

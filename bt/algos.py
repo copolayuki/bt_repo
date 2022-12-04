@@ -27,20 +27,17 @@ def run_always(f):
 
 
 class PrintDate(Algo):
-
     """
     This Algo simply print's the current date.
 
     Can be useful for debugging purposes.
     """
-
     def __call__(self, target):
         print(target.now)
         return True
 
 
 class PrintTempData(Algo):
-
     """
     This Algo prints the temp data.
 
@@ -51,7 +48,6 @@ class PrintTempData(Algo):
           target's temp dict. Therefore, you should provide
           what you want to examine within curly braces ( { } )
     """
-
     def __init__(self, fmt_string=None):
         super(PrintTempData, self).__init__()
         self.fmt_string = fmt_string
@@ -65,7 +61,6 @@ class PrintTempData(Algo):
 
 
 class PrintInfo(Algo):
-
     """
     Prints out info associated with the target strategy. Useful for debugging
     purposes.
@@ -81,9 +76,7 @@ class PrintInfo(Algo):
 
     This will print out the name and the date (now) on each call.
     Basically, you provide a string that will be formatted with target.__dict__
-
     """
-
     def __init__(self, fmt_string="{name} {now}"):
         super(PrintInfo, self).__init__()
         self.fmt_string = fmt_string
@@ -94,14 +87,12 @@ class PrintInfo(Algo):
 
 
 class Debug(Algo):
-
     """
     Utility Algo that calls pdb.set_trace when triggered.
 
     In the debug session, 'target' is available and can be examined through the
     StrategyBase interface.
     """
-
     def __call__(self, target):
         import pdb
 
@@ -110,7 +101,6 @@ class Debug(Algo):
 
 
 class RunOnce(Algo):
-
     """
     Returns True on first run then returns False.
 
@@ -119,9 +109,7 @@ class RunOnce(Algo):
 
     As the name says, the algo only runs once. Useful in situations
     where we want to run the logic once (buy and hold for example).
-
     """
-
     def __init__(self):
         super(RunOnce, self).__init__()
         self.has_run = False
@@ -138,9 +126,10 @@ class RunOnce(Algo):
 
 
 class RunPeriod(Algo):
-    def __init__(
-        self, run_on_first_date=True, run_on_end_of_period=False, run_on_last_date=False
-    ):
+    def __init__(self, run_on_first_date=True, 
+                         run_on_end_of_period=False, 
+                         run_on_last_date=False
+                         ):
         super(RunPeriod, self).__init__()
         self._run_on_first_date = run_on_first_date
         self._run_on_end_of_period = run_on_end_of_period
@@ -196,7 +185,6 @@ class RunPeriod(Algo):
 
 
 class RunDaily(RunPeriod):
-
     """
     Returns True on day change.
 
@@ -209,9 +197,7 @@ class RunDaily(RunPeriod):
     Returns True if the target.now's day has changed
     compared to the last(or next if run_on_end_of_period) date, if not returns False.
     Useful for daily rebalancing strategies.
-
     """
-
     def compare_dates(self, now, date_to_compare):
         if now.date() != date_to_compare.date():
             return True
@@ -219,7 +205,6 @@ class RunDaily(RunPeriod):
 
 
 class RunWeekly(RunPeriod):
-
     """
     Returns True on week change.
 
@@ -232,9 +217,7 @@ class RunWeekly(RunPeriod):
     Returns True if the target.now's week has changed
     since relative to the last(or next) date, if not returns False. Useful for
     weekly rebalancing strategies.
-
     """
-
     def compare_dates(self, now, date_to_compare):
         if now.year != date_to_compare.year or now.week != date_to_compare.week:
             return True
@@ -242,7 +225,6 @@ class RunWeekly(RunPeriod):
 
 
 class RunMonthly(RunPeriod):
-
     """
     Returns True on month change.
 
@@ -255,9 +237,7 @@ class RunMonthly(RunPeriod):
     Returns True if the target.now's month has changed
     since relative to the last(or next) date, if not returns False. Useful for
     monthly rebalancing strategies.
-
     """
-
     def compare_dates(self, now, date_to_compare):
         if now.year != date_to_compare.year or now.month != date_to_compare.month:
             return True
@@ -265,7 +245,6 @@ class RunMonthly(RunPeriod):
 
 
 class RunQuarterly(RunPeriod):
-
     """
     Returns True on quarter change.
 
@@ -278,9 +257,7 @@ class RunQuarterly(RunPeriod):
     Returns True if the target.now's quarter has changed
     since relative to the last(or next) date, if not returns False. Useful for
     quarterly rebalancing strategies.
-
     """
-
     def compare_dates(self, now, date_to_compare):
         if now.year != date_to_compare.year or now.quarter != date_to_compare.quarter:
             return True
@@ -288,7 +265,6 @@ class RunQuarterly(RunPeriod):
 
 
 class RunYearly(RunPeriod):
-
     """
     Returns True on year change.
 
@@ -301,9 +277,7 @@ class RunYearly(RunPeriod):
     Returns True if the target.now's year has changed
     since relative to the last(or next) date, if not returns False. Useful for
     yearly rebalancing strategies.
-
     """
-
     def compare_dates(self, now, date_to_compare):
         if now.year != date_to_compare.year:
             return True
@@ -311,15 +285,12 @@ class RunYearly(RunPeriod):
 
 
 class RunOnDate(Algo):
-
     """
     Returns True on a specific set of dates.
 
     Args:
         * dates (list): List of dates to run Algo on.
-
     """
-
     def __init__(self, *dates):
         """
         Args:
@@ -336,7 +307,6 @@ class RunOnDate(Algo):
 
 
 class RunAfterDate(Algo):
-
     """
     Returns True after a date has passed
 
@@ -346,9 +316,7 @@ class RunAfterDate(Algo):
     Note:
         This is useful for algos that rely on trailing averages where you
         don't want to start trading until some amount of data has been built up
-
     """
-
     def __init__(self, date):
         """
         Args:
@@ -363,7 +331,6 @@ class RunAfterDate(Algo):
 
 
 class RunAfterDays(Algo):
-
     """
     Returns True after a specific number of 'warmup' trading days have passed
 
@@ -373,9 +340,7 @@ class RunAfterDays(Algo):
     Note:
         This is useful for algos that rely on trailing averages where you
         don't want to start trading until some amount of data has been built up
-
     """
-
     def __init__(self, days):
         """
         Args:
@@ -392,7 +357,6 @@ class RunAfterDays(Algo):
 
 
 class RunIfOutOfBounds(Algo):
-
     """
     This algo returns true if any of the target weights deviate by an amount greater
     than tolerance. For example, it will be run if the tolerance is set to 0.5 and
@@ -408,9 +372,7 @@ class RunIfOutOfBounds(Algo):
 
     Requires:
         * Weights
-
     """
-
     def __init__(self, tolerance):
         self.tolerance = float(tolerance)
         super(RunIfOutOfBounds, self).__init__()
@@ -439,7 +401,6 @@ class RunIfOutOfBounds(Algo):
 
 
 class RunEveryNPeriods(Algo):
-
     """
     This algo runs every n periods.
 
@@ -453,9 +414,7 @@ class RunEveryNPeriods(Algo):
 
     You could then create 3 strategies with different offsets and create a
     master strategy that would allocate equal amounts of capital to each.
-
     """
-
     def __init__(self, n, offset=0):
         super(RunEveryNPeriods, self).__init__()
         self.n = n
@@ -479,7 +438,6 @@ class RunEveryNPeriods(Algo):
 
 
 class SelectAll(Algo):
-
     """
     Sets temp['selected'] with all securities (based on universe).
 
@@ -493,9 +451,7 @@ class SelectAll(Algo):
           or zero prices?
     Sets:
         * selected
-
     """
-
     def __init__(self, include_no_data=False, include_negative=False):
         super(SelectAll, self).__init__()
         self.include_no_data = include_no_data
@@ -514,7 +470,6 @@ class SelectAll(Algo):
 
 
 class SelectThese(Algo):
-
     """
     Sets temp['selected'] with a set list of tickers.
 
@@ -526,9 +481,7 @@ class SelectThese(Algo):
 
     Sets:
         * selected
-
     """
-
     def __init__(self, tickers, include_no_data=False, include_negative=False):
         super(SelectThese, self).__init__()
         self.tickers = tickers
@@ -548,7 +501,6 @@ class SelectThese(Algo):
 
 
 class SelectHasData(Algo):
-
     """
     Sets temp['selected'] based on all items in universe that meet
     data requirements.
@@ -581,9 +533,7 @@ class SelectHasData(Algo):
           or zero prices?
     Sets:
         * selected
-
     """
-
     def __init__(
         self,
         lookback=pd.DateOffset(months=3),
@@ -617,7 +567,6 @@ class SelectHasData(Algo):
 
 
 class SelectN(Algo):
-
     """
     Sets temp['selected'] based on ranking temp['stat'].
 
@@ -640,9 +589,7 @@ class SelectN(Algo):
 
     Requires:
         * stat
-
     """
-
     def __init__(
         self, n, sort_descending=True, all_or_none=False, filter_selected=False
     ):
@@ -676,7 +623,6 @@ class SelectN(Algo):
 
 
 class SelectMomentum(AlgoStack):
-
     """
     Sets temp['selected'] based on a simple momentum filter.
 
@@ -701,9 +647,7 @@ class SelectMomentum(AlgoStack):
 
     Requires:
         * selected
-
     """
-
     def __init__(
         self,
         n,
@@ -719,7 +663,6 @@ class SelectMomentum(AlgoStack):
 
 
 class SelectWhere(Algo):
-
     """
     Selects securities based on an indicator DataFrame.
 
@@ -739,9 +682,7 @@ class SelectWhere(Algo):
 
     Sets:
         * selected
-
     """
-
     def __init__(self, signal, include_no_data=False, include_negative=False):
         super(SelectWhere, self).__init__()
         if isinstance(signal, pd.DataFrame):

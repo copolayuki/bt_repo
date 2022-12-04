@@ -26,7 +26,6 @@ def run(*backtests):
     # run each backtest
     for bkt in backtests:
         bkt.run()
-
     return Result(*backtests)
 
 
@@ -75,12 +74,10 @@ def benchmark_random(backtest, random_strategy, nsim=100):
 
     # now create new RandomBenchmarkResult
     res = RandomBenchmarkResult(*bts)
-
     return res
 
 
 class Backtest(object):
-
     """
     A Backtest combines a Strategy with data to
     produce a Result.
@@ -137,18 +134,14 @@ class Backtest(object):
 
     """
 
-    def __init__(
-        self,
-        strategy,
-        data,
-        name=None,
-        initial_capital=1000000.0,
-        commissions=None,
-        integer_positions=True,
-        progress_bar=False,
-        additional_data=None,
-    ):
-
+    def __init__(self, strategy, data, name=None,
+                                        initial_capital=1000000.0,
+                                        commissions=None,
+                                        integer_positions=True,
+                                        progress_bar=False,
+                                        additional_data=None,
+                                        ):
+        
         if data.columns.duplicated().any():
             cols = data.columns[data.columns.duplicated().tolist()].tolist()
             raise Exception(
@@ -569,7 +562,7 @@ class RandomBenchmarkResult(Result):
             title = "%s histogram" % statistic
 
         plt.figure(figsize=figsize)
-
+        
         ser = self.r_stats.loc[statistic]
 
         ax = ser.hist(bins=bins, figsize=figsize, density=True, **kwargs)
@@ -598,7 +591,6 @@ class RenormalizedFixedIncomeResult(Result):
         * normalizing_value: pd.Series, float or dict thereof(by strategy name)
         * backtests (list): List of backtests (i.e. from Result.backtest_list)
     """
-
     def __init__(self, normalizing_value, *backtests):
         for backtest in backtests:
             if not backtest.strategy.fixed_income:
@@ -627,3 +619,10 @@ class RenormalizedFixedIncomeResult(Result):
         prices = bt.core.PAR * (1.0 + (returns / v).cumsum())
         prices.iloc[0] = bt.core.PAR
         return prices
+
+if __name__ == '__main__' :
+    
+    pass
+    
+    
+    
